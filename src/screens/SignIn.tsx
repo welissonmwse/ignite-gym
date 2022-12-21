@@ -4,6 +4,7 @@ import { Input } from '@components/Input';
 
 import backgroundImg from '@assets/background.png';
 import LogoSvg from '@assets/logo.svg';
+import { Button } from '@components/Button';
 
 export function SignIn(){
   return(
@@ -28,7 +29,9 @@ export function SignIn(){
           placeholder="Senha"
           secureTextEntry
         />
+        <Button title="Acessar" />
       </Center>
+      <Button title="Criar conta" variant="outline" />
     </VStack>
   );
 }

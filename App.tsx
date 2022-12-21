@@ -5,11 +5,13 @@ import { useFonts, Roboto_400Regular, Roboto_700Bold} from '@expo-google-fonts/r
 import {Loading} from '@components/Loading';
 import { SignIn } from '@screens/SignIn';
 
+import { THEME } from './src/theme';
+
 export default function App() {
   const [fontsLoaded] = useFonts({Roboto_400Regular, Roboto_700Bold});
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={THEME}>
       <StatusBar
         barStyle="light-content"
         backgroundColor="transparent"
