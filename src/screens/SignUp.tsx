@@ -17,7 +17,13 @@ export function SignUp(){
   return(
     <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false}>
       <VStack flex={1} px={10} pb={10}>
-        <Image source={backgroundImg} alt="Pessoas treinando" resizeMode="contain" position="absolute"/>
+        <Image
+          source={backgroundImg}
+          defaultSource={backgroundImg}
+          alt="Pessoas treinando"
+          resizeMode="contain"
+          position="absolute"
+        />
         <Center my={24}>
           <LogoSvg />
           <Text color="gray.100" fontSize="sm">

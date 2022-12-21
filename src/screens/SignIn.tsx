@@ -19,7 +19,13 @@ export function SignIn(){
   return(
     <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false}>
       <VStack flex={1} px={10} pb={10}>
-        <Image source={backgroundImg} alt="Pessoas treinando" resizeMode="contain" position="absolute"/>
+        <Image
+          source={backgroundImg}
+          defaultSource={backgroundImg}
+          alt="Pessoas treinando"
+          resizeMode="contain"
+          position="absolute"
+        />
         <Center my={24}>
           <LogoSvg />
           <Text color="gray.100" fontSize="sm">
@@ -28,7 +34,7 @@ export function SignIn(){
         </Center>
         <Center>
           <Heading color="gray.100" fontSize="xl" fontFamily="heading" mb={6}>
-        Acesse sua conta
+            Acesse sua conta
           </Heading>
           <Input
             placeholder="E-mail"
@@ -43,7 +49,7 @@ export function SignIn(){
         </Center>
         <Center mt={24}>
           <Text color="gray.100" fontSize="sm" mb={3} fontFamily="body">
-          Ainda não tem acesso?
+            Ainda não tem acesso?
           </Text>
           <Button
             title="Criar conta"
