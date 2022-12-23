@@ -7,6 +7,7 @@ import { ExerciseCard } from '@components/ExerciseCard';
 
 export function Home(){
   const groups = ['Costas', 'Bíceps', 'Tríceps', 'Ombro'];
+  const exercise = ['Puxada frontal', 'Remada curvada', 'Remada unilateral', 'Levantamento terra'];
   const [groupSelected, setGroupSelected] = useState(groups[0]);
 
   return(
@@ -37,7 +38,15 @@ export function Home(){
             4
           </Text>
         </HStack>
-        <ExerciseCard />
+        <FlatList
+          data={exercise}
+          keyExtractor={item => item}
+          renderItem={({item}) => (
+            <ExerciseCard name={item}/>
+          )}
+          showsVerticalScrollIndicator={false}
+          _contentContainerStyle={{paddingBottom: 20}}
+        />
       </VStack>
     </VStack>
   );
