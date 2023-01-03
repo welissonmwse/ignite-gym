@@ -1,11 +1,12 @@
-import { Center, ScrollView, Skeleton, VStack } from 'native-base';
+import { TouchableOpacity } from 'react-native';
+import { Center, ScrollView, Skeleton, Text, VStack } from 'native-base';
 
 import { ScreenHeader } from '@components/ScreenHeader';
 import { UserPhoto } from '@components/UserPhoto';
 import { useState } from 'react';
 
 export function Profile(){
-  const [photoIsLoading, setPhotoIsLoading] = useState(true);
+  const [photoIsLoading, setPhotoIsLoading] = useState(false);
   return(
     <VStack flex={1}>
       <ScreenHeader title="Perfil" />
@@ -29,6 +30,11 @@ export function Profile(){
               />
             )
           }
+          <TouchableOpacity>
+            <Text color="green.500" fontWeight="bold" fontSize="md" mt={2} mb={8}>
+              Alterar foto
+            </Text>
+          </TouchableOpacity>
         </Center>
       </ScrollView>
     </VStack>
