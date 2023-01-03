@@ -35,14 +35,17 @@ export function SignUp(){
             Crie sua conta
           </Heading>
           <Input
+            bg="gray.700"
             placeholder="Nome"
           />
           <Input
+            bg="gray.700"
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
           />
           <Input
+            bg="gray.700"
             placeholder="Senha"
             secureTextEntry
           />

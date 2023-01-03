@@ -37,11 +37,13 @@ export function SignIn(){
             Acesse sua conta
           </Heading>
           <Input
+            bg="gray.700"
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
           />
           <Input
+            bg="gray.700"
             placeholder="Senha"
             secureTextEntry
           />
