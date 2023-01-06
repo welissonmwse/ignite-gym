@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Heading, SectionList, Text, useToast, VStack } from 'native-base';
 
 import { api } from '@services/api';
@@ -6,20 +6,12 @@ import { AppError } from '@utils/AppError';
 
 import { HistoryCard } from '@components/HistoryCard';
 import { ScreenHeader } from '@components/ScreenHeader';
+import { HistoryGroupByDayDTO } from '@dtos/HistoryGroupByDayDTO';
+import { useFocusEffect } from '@react-navigation/native';
 
 export function History(){
   const [isLoading, setIsLoading] = useState(true);
-  // const [exercises, setExercises] = useState([]);
-  const exercises = [
-    {
-      title: '26.08.23',
-      data: ['Puxada frontal', 'Remada unilateral']
-    },
-    {
-      title: '27.08.23',
-      data: ['Puxada frontal']
-    },
-  ];
+  const [exercises, setExercises] = useState<HistoryGroupByDayDTO[]>([]);
 
   const toast = useToast();
 
@@ -27,7 +19,7 @@ export function History(){
     try {
       setIsLoading(true);
       const response = await api.get('/history');
-      // setExercises(response.data);
+      setExercises(response.data);
       console.log(response.data[0]);
       // const data = response.data.map()
 
@@ -45,16 +37,16 @@ export function History(){
     }
   }
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     fetchHistory();
-  }, []);
+  }, []));
 
   return(
     <VStack flex={1}>
       <ScreenHeader title="Histórico de Exercícios" />
       <SectionList
         sections={exercises}
-        keyExtractor={item => item}
+        keyExtractor={item => item.id}
         renderItem={({item}) => (
           <HistoryCard />
         )}
