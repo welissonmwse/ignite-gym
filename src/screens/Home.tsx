@@ -5,13 +5,15 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
 
+import { ExercisesDTO } from '@dtos/ExercisesDTO';
+
 import { HomeHeader } from '@components/HomeHeader';
 import { Group } from '@components/Group';
 import { ExerciseCard } from '@components/ExerciseCard';
 import { AppNavigationRoutesProps } from '@routes/app.routes';
 
 export function Home(){
-  const [exercise, setExercise] = useState([]);
+  const [exercises, setExercises] = useState<ExercisesDTO[]>([]);
   const [groups, setGroups] = useState<string[]>([]);
   const [groupSelected, setGroupSelected] = useState(groups[0]);
 
@@ -39,10 +41,10 @@ export function Home(){
     }
   }
 
-  async function fetchExerciseByGroups(){
+  async function fetchExercisesByGroups(){
     try {
       const response = await api.get(`/exercises/bygroup/${groupSelected}`);
-      console.log(response.data);
+      setExercises(response.data);
 
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -61,7 +63,7 @@ export function Home(){
   }, []);
 
   useFocusEffect(useCallback(() => {
-    fetchExerciseByGroups();
+    fetchExercisesByGroups();
   }, [groupSelected]));
 
   return(
@@ -90,14 +92,14 @@ export function Home(){
             Exercícios
           </Heading>
           <Text color="gray.200" fontSize="sm">
-            {exercise.length}
+            {exercises.length}
           </Text>
         </HStack>
         <FlatList
-          data={exercise}
-          keyExtractor={item => item}
+          data={exercises}
+          keyExtractor={item => item.id}
           renderItem={({item}) => (
-            <ExerciseCard name={item} onPress={handleOpenExerciseDetails}/>
+            <ExerciseCard name={item.name} onPress={handleOpenExerciseDetails}/>
           )}
           showsVerticalScrollIndicator={false}
           _contentContainerStyle={{paddingBottom: 20}}
