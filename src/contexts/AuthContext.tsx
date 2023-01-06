@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 
 import { storageUserGet, storageUserRemove, storageUserSave } from '@storage/storageUser';
-import { storageAuthTokenSave } from '@storage/storageAuthToken';
+import { storageAuthTokenGet, storageAuthTokenSave } from '@storage/storageAuthToken';
 
 import { UserDTO } from '@dtos/UserDTO';
 import { api } from '@services/api';
@@ -23,15 +23,18 @@ export function AuthContextProvider({ children } : AuthContextProviderDataProps)
   const [user, setUser] = useState({} as UserDTO);
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
 
-  async function storageUserAndToken(userData: UserDTO, token: string){
+  function userAndTokenUpdate(userData: UserDTO, token: string){
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    setUser(userData);
+  }
+
+  async function storageUserAndTokenSave(userData: UserDTO, token: string){
     try {
       setIsLoadingUserStorageData(true);
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
       await storageUserSave(userData);
       await storageAuthTokenSave(token);
-      setUser(userData);
 
     } catch (error) {
       console.log(error);
@@ -47,7 +50,9 @@ export function AuthContextProvider({ children } : AuthContextProviderDataProps)
       const {data} = await api.post('/sessions', {email, password});
 
       if(data.user && data.token){
-        storageUserAndToken(data.user, data.token);
+        await storageUserAndTokenSave(data.user, data.token);
+
+        userAndTokenUpdate(data.user, data.token);
       }
 
     } catch (error) {
@@ -74,10 +79,13 @@ export function AuthContextProvider({ children } : AuthContextProviderDataProps)
 
   async function loadUserData(){
     try {
-      const userLogged = await storageUserGet();
+      setIsLoadingUserStorageData(true);
 
-      if(userLogged){
-        setUser(userLogged);
+      const userLogged = await storageUserGet();
+      const token = await storageAuthTokenGet();
+
+      if(token && userLogged){
+        userAndTokenUpdate(userLogged, token);
       }
 
     } catch (error) {
