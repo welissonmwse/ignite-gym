@@ -12,10 +12,12 @@ import ProfileSvg from '@assets/profile.svg';
 import { Platform } from 'react-native';
 
 type AppRoutes = {
-  home: undefined
-  history: undefined
-  profile: undefined
-  exercise: undefined
+  home: undefined;
+  history: undefined;
+  profile: undefined;
+  exercise: {
+    execiseId: string;
+  };
 }
 
 export type AppNavigationRoutesProps = BottomTabNavigationProp<AppRoutes>;

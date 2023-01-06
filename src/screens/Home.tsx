@@ -22,8 +22,8 @@ export function Home(){
   const toast = useToast();
   const {navigate} = useNavigation<AppNavigationRoutesProps>();
 
-  function handleOpenExerciseDetails(){
-    navigate('exercise');
+  function handleOpenExerciseDetails(execiseId: string){
+    navigate('exercise', {execiseId});
   }
 
   async function fetchGroups(){
@@ -110,7 +110,7 @@ export function Home(){
               data={exercises}
               keyExtractor={item => item.id}
               renderItem={({item}) => (
-                <ExerciseCard data={item} onPress={handleOpenExerciseDetails}/>
+                <ExerciseCard data={item} onPress={() => handleOpenExerciseDetails(item.id)}/>
               )}
               showsVerticalScrollIndicator={false}
               _contentContainerStyle={{paddingBottom: 20}}
