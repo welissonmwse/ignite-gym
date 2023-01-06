@@ -22,8 +22,8 @@ export function Home(){
   const toast = useToast();
   const {navigate} = useNavigation<AppNavigationRoutesProps>();
 
-  function handleOpenExerciseDetails(execiseId: string){
-    navigate('exercise', {execiseId});
+  function handleOpenExerciseDetails(exerciseId: string){
+    navigate('exercise', {exerciseId});
   }
 
   async function fetchGroups(){
