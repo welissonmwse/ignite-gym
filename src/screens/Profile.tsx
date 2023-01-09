@@ -19,6 +19,8 @@ import { UserPhoto } from '@components/UserPhoto';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 
+import defaultUserPhotoImg from '@assets/userPhotoDefault.png';
+
 type FormDataProps = {
   name: string;
   email: string;
@@ -47,7 +49,6 @@ const profileSchema = yup.object({
 export function Profile(){
   const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
-  const [userPhoto, setUserPhoto] = useState('https://github.com/welissonmwse.png');
 
   const toast = useToast();
   const { user, updateUserProfile } = useAuth();
@@ -161,7 +162,7 @@ export function Profile(){
               />
             ) : (
               <UserPhoto
-                source={{uri: userPhoto}}
+                source={user.avatar ? {uri: `${api.defaults.baseURL}/avatar/${user.avatar}`} : defaultUserPhotoImg}
                 mr={4}
                 size={33}
                 alt="Imagem do usuário"
