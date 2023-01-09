@@ -50,7 +50,7 @@ export function Profile(){
   const [userPhoto, setUserPhoto] = useState('https://github.com/welissonmwse.png');
 
   const toast = useToast();
-  const { user } = useAuth();
+  const { user, updateUserProfile } = useAuth();
 
   const {control, handleSubmit, formState: {errors}} = useForm<FormDataProps>({
     defaultValues: {
@@ -63,7 +63,12 @@ export function Profile(){
   async function handlePlofileUpdate(data: FormDataProps){
     try {
       setIsUpdating(true);
+      const userUpdated = user;
+      userUpdated.name = data.name;
+
       await api.put('/users', data);
+
+      await updateUserProfile(userUpdated);
 
       toast.show({
         title: 'Perfil atualizado com sucesso!',
@@ -106,7 +111,32 @@ export function Profile(){
             bgColor: 'red.500'
           });
         }
-        setUserPhoto(photoSelected.assets[0].uri);
+        // setUserPhoto(photoSelected.assets[0].uri);
+        const fileExtension = photoSelected.assets[0].uri.split('.').pop();
+
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`.toLowerCase(),
+          uri: photoSelected.assets[0].uri,
+          type: `${photoSelected.assets[0].type}/${fileExtension}`
+        } as any;
+
+        const userPhotoUploadForm = new FormData();
+        userPhotoUploadForm.append('avatar', photoFile);
+
+        const avatarUpdatedResponse = await api.patch('/users/avatar', userPhotoUploadForm, {
+          headers: { 'Content-Type': 'multipart/form-data'}
+        });
+
+        const userUpdated = user;
+        userUpdated.avatar = avatarUpdatedResponse.data.avatar;
+
+        updateUserProfile(userUpdated);
+
+        toast.show({
+          title: 'Foto atualizada!',
+          placement: 'top',
+          bgColor: 'green.700'
+        });
       }
 
     } catch (error) {
