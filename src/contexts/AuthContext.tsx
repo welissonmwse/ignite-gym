@@ -9,8 +9,9 @@ import { api } from '@services/api';
 export type AuthContextDataProps = {
   user: UserDTO;
   isLoadingUserStorageData: boolean;
+  refreshedToken: string;
   signIn: (email: string, password: string) => Promise<void>;
-  singOut: () => Promise<void>;
+  signOut: () => Promise<void>;
   updateUserProfile: (user: UserDTO) => Promise<void>;
 }
 
@@ -22,9 +23,10 @@ export const AuthContext = createContext<AuthContextDataProps>({} as AuthContext
 
 export function AuthContextProvider({ children } : AuthContextProviderDataProps){
   const [user, setUser] = useState({} as UserDTO);
+  const [refreshedToken, setRefreshedToken] = useState('');
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true);
 
-  function userAndTokenUpdate(userData: UserDTO, token: string){
+  async function userAndTokenUpdate(userData: UserDTO, token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     setUser(userData);
@@ -63,7 +65,7 @@ export function AuthContextProvider({ children } : AuthContextProviderDataProps)
 
   }
 
-  async function singOut(){
+  async function signOut(){
     try {
       setIsLoadingUserStorageData(true);
       setUser({} as UserDTO);
@@ -110,21 +112,24 @@ export function AuthContextProvider({ children } : AuthContextProviderDataProps)
     }
   }
 
+  function refreshTokenUpdated(newToken: string){
+    setRefreshedToken(newToken);
+  }
+
   useEffect(() => {
     loadUserData();
   }, []);
 
   useEffect(() => {
-    const subscribe = api.registerInterceptTokenManager(singOut);
+    const subscribe = api.registerInterceptTokenManager({ signOut, refreshTokenUpdated });
 
     return () => {
       subscribe();
     };
-
-  }, [singOut]);
+  },[signOut]);
 
   return (
-    <AuthContext.Provider value={{user, isLoadingUserStorageData, signIn, singOut, updateUserProfile}}>
+    <AuthContext.Provider value={{user, isLoadingUserStorageData, refreshedToken, signIn, signOut, updateUserProfile}}>
       {children}
     </AuthContext.Provider>
   );
